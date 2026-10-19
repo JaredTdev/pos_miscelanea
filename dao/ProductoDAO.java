@@ -56,4 +56,24 @@ public class ProductoDAO {
         }
         return prod; // Retorna el objeto Producto o null si no lo encontró
     }
+
+    // 3. Método para ACTUALIZAR el stock tras una venta
+    public boolean actualizarStock(int idProducto, int cantidadVendida) {
+        String sql = "UPDATE productos SET stock = stock - ? WHERE id = ? AND stock >= ?";
+        
+        try (Connection con = Conexion.getConexion();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            
+            ps.setInt(1, cantidadVendida);
+            ps.setInt(2, idProducto);
+            ps.setInt(3, cantidadVendida); // Evita que el stock quede en negativo
+            
+            int resultado = ps.executeUpdate();
+            return resultado > 0;
+            
+        } catch (SQLException e) {
+            System.out.println("Error al actualizar stock: " + e.getMessage());
+            return false;
+        }
+    }
 }
