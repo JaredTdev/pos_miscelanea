@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import conexion.Conexion;
@@ -83,6 +84,28 @@ public class VentaDAO {
                 if (con != null) con.close();
             } catch (SQLException e) { e.printStackTrace(); }
         }
+    }
+
+    // 2. CONSULTAR HISTORIAL DE VENTAS (Para llenar una tabla de reportes)
+    public List<Object[]> obtenerHistorialVentas() {
+        List<Object[]> listaVentas = new ArrayList<>();
+        String sql = "SELECT id, fecha, total FROM ventas ORDER BY fecha DESC";
+
+        try (Connection con = Conexion.getConexion();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Object[] fila = new Object[3];
+                fila[0] = rs.getInt("id");
+                fila[1] = rs.getTimestamp("fecha");
+                fila[2] = rs.getDouble("total");
+                listaVentas.add(fila);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al obtener historial: " + e.getMessage());
+        }
+        return listaVentas;
     }
     
 }
