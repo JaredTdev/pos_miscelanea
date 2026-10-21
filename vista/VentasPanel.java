@@ -108,4 +108,16 @@ public class VentasPanel extends JPanel {
     
 
     }
+
+    private void limpiarPantallaCompleta() {
+        modeloTabla.setRowCount(0);
+        totalVenta = 0.0;
+        lblTotal.setText("$0.00");
+        txtEscaner.requestFocusInWindow();
+    }
+
+    // Método para forzar foco desde el contenedor principal (JFrame o JTabbedPane)
+    public void solicitarFocoEscaner() {
+        txtEscaner.requestFocusInWindow();
+    }
 }
