@@ -109,6 +109,57 @@ public class VentasPanel extends JPanel {
 
     }
 
+    private void agregarProductoAlCarrito(String codigo) {
+        Producto prod = productoDAO.buscarPorCodigo(codigo);
+
+        if (prod == null) {
+            JOptionPane.showMessageDialog(this, "Producto no encontrado.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (prod.getStock() <= 0) {
+            JOptionPane.showMessageDialog(this, "Sin stock disponible de: " + prod.getNombre(), "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int filaExistente = -1;
+        // Comprobar si el producto ya está en la lista actual de la tabla
+        for (int i = 0; i < modeloTabla.getRowCount(); i++) {
+            if (modeloTabla.getValueAt(i, 1).toString().equals(codigo)) {
+                filaExistente = i;
+                break;
+            }
+        }
+
+        if (filaExistente != -1) {
+            // El artículo ya existe, aumentamos cantidad si el stock lo permite
+            int cantActual = (int) modeloTabla.getValueAt(filaExistente, 3);
+            if (cantActual + 1 > prod.getStock()) {
+                JOptionPane.showMessageDialog(this, "No puedes agregar más. Límite de stock alcanzado.", "Límite", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            int nuevaCant = cantActual + 1;
+            double precio = (double) modeloTabla.getValueAt(filaExistente, 4);
+            double nuevoSubtotal = nuevaCant * precio;
+
+            modeloTabla.setValueAt(nuevaCant, filaExistente, 3);
+            modeloTabla.setValueAt(nuevoSubtotal, filaExistente, 5);
+        } else {
+            // Producto nuevo en el carrito, se añade fila por primera vez
+            Object[] nuevaFila = {
+                prod.getId(),
+                prod.getCodigoBarras(),
+                prod.getNombre(),
+                1, // Cantidad inicial
+                prod.getPrecioVenta(),
+                prod.getPrecioVenta() // Subtotal inicial
+            };
+            modeloTabla.addRow(nuevaFila);
+        }
+
+        calcularTotal();
+    }
+
     private void quitarArticuloSeleccionado() {
         int filaSeleccionada = tblCarrito.getSelectedRow();
         if (filaSeleccionada >= 0) {
