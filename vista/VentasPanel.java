@@ -109,6 +109,16 @@ public class VentasPanel extends JPanel {
 
     }
 
+    private void quitarArticuloSeleccionado() {
+        int filaSeleccionada = tblCarrito.getSelectedRow();
+        if (filaSeleccionada >= 0) {
+            modeloTabla.removeRow(filaSeleccionada);
+            calcularTotal();
+        } else {
+            JOptionPane.showMessageDialog(this, "Selecciona un artículo de la tabla para quitarlo.", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
     private void calcularTotal() {
         totalVenta = 0.0;
         for (int i = 0; i < modeloTabla.getRowCount(); i++) {
