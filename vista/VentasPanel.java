@@ -109,6 +109,47 @@ public class VentasPanel extends JPanel {
 
     }
 
+    private void calcularTotal() {
+        totalVenta = 0.0;
+        for (int i = 0; i < modeloTabla.getRowCount(); i++) {
+            totalVenta += (double) modeloTabla.getValueAt(i, 5);
+        }
+        lblTotal.setText(String.format("$%.2f", totalVenta));
+    }
+
+    private void procesarCobro() {
+        if (modeloTabla.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(this, "El carrito de compras está vacío.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Estructurar los datos para enviarlos a VentaDAO de forma transaccional
+        List<Object[]> detallesCarrito = new ArrayList<>();
+        
+        for (int i = 0; i < modeloTabla.getRowCount(); i++) {
+            int idProd = (int) modeloTabla.getValueAt(i, 0);
+            int cantidad = (int) modeloTabla.getValueAt(i, 3);
+            double precioUnitario = (double) modeloTabla.getValueAt(i, 4);
+            
+            // Estructura idéntica a la que espera el bucle for de tu VentaDAO: Object[] { id, cantidad, precio }
+            detallesCarrito.add(new Object[]{ idProd, cantidad, precioUnitario });
+        }
+
+        // Llamada a la capa de persistencia transaccional
+        boolean exito = ventaDAO.registrarVenta(totalVenta, detallesCarrito);
+
+        if (exito) {
+            JOptionPane.showMessageDialog(this, "¡Venta registrada con éxito!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            
+            // TODO: Lanzar la impresión del ticket aquí en el siguiente paso.
+
+            limpiarPantallaCompleta();
+        } else {
+            JOptionPane.showMessageDialog(this, "Hubo un error al procesar la transacción.\nVerifique stock e intente nuevamente.", "Error Crítico", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+
     private void limpiarPantallaCompleta() {
         modeloTabla.setRowCount(0);
         totalVenta = 0.0;
