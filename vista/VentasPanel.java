@@ -109,6 +109,17 @@ public class VentasPanel extends JPanel {
 
     }
 
+    private void configurarEscaner() {
+        // Al dar "Enter" con el escáner se procesa el artículo
+        txtEscaner.addActionListener(e -> {
+            String codigo = txtEscaner.getText().trim();
+            if (!codigo.isEmpty()) {
+                agregarProductoAlCarrito(codigo);
+            }
+            txtEscaner.setText("");
+        });
+    }
+
     private void agregarProductoAlCarrito(String codigo) {
         Producto prod = productoDAO.buscarPorCodigo(codigo);
 
