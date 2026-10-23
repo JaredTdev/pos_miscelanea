@@ -21,6 +21,13 @@ public class VentasPanel extends JPanel {
     private VentaDAO ventaDAO;
     private double totalVenta = 0.0;
 
+    public VentasPanel() {
+        productoDAO = new ProductoDAO();
+        ventaDAO = new VentaDAO();
+        initComponents();
+        configurarEscaner();
+    }
+
     private void initComponents() {
         setLayout(new BorderLayout(15, 15));
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -104,7 +111,9 @@ public class VentasPanel extends JPanel {
         pnlSur.add(pnlBotones, BorderLayout.SOUTH);
         add(pnlSur, BorderLayout.SOUTH);
 
-        
+        // --- EVENTOS DE BOTONES ---
+        btnEliminar.addActionListener(e -> quitarArticuloSeleccionado());
+        btnCobrar.addActionListener(e -> procesarCobro());
     
 
     }
