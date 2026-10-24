@@ -68,4 +68,50 @@ public class TicketPrinterService implements Printable{
 
         return PAGE_EXISTS;
     }
+
+    /**
+     * Envía a imprimir de manera silenciosa (segundo plano).
+     * @param nombreImpresora Opcional: Nombre exacto de tu ticketera en Windows/Linux. 
+     *                        Si se pasa "default" o vacío, usará la del sistema.
+     */
+    public void imprimirSilencioso(String nombreImpresora) {
+        PrinterJob job = PrinterJob.getPrinterJob();
+        job.setPrintable(this);
+
+        // Configurar tamaño de página genérico para ticketera (Ancho fijo, alto variable)
+        PageFormat pf = job.defaultPage();
+        Paper paper = new Paper();
+        // 1 pulgada = 72 puntos. Un ticket de 58mm son aprox 164 puntos, el de 80mm son 226 puntos.
+        paper.setSize(180, 500); 
+        paper.setImageableArea(5, 5, 170, 490);
+        pf.setPaper(paper);
+        
+        // Asignar el tamaño formateado al trabajo
+        job.setPrintable(this, pf);
+
+        // Buscar impresora específica por nombre
+        if (nombreImpresora != null && !nombreImpresora.trim().isEmpty() && !nombreImpresora.equalsIgnoreCase("default")) {
+            PrintService[] servicios = PrintServiceLookup.lookupPrintServices(null, null);
+            for (PrintService service : servicios) {
+                if (service.getName().toLowerCase().contains(nombreImpresora.toLowerCase())) {
+                    try {
+                        job.setPrintService(service);
+                        break;
+                    } catch (PrinterException e) {
+                        System.out.println("No se pudo usar la impresora especificada: " + e.getMessage());
+                    }
+                }
+            }
+        }
+
+        // Ejecutar en un hilo separado para que la interfaz gráfica no se congele ni un milisegundo
+        new Thread(() -> {
+            try {
+                // LLAMADA DIRECTA: Ejecuta la impresión sin usar job.printDialog()
+                job.print();
+            } catch (PrinterException ex) {
+                System.out.println("Error al imprimir ticket de forma silenciosa: " + ex.getMessage());
+            }
+        }).start();
+    }
 }
