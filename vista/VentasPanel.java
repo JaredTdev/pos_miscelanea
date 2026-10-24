@@ -206,21 +206,34 @@ public class VentasPanel extends JPanel {
 
         // Estructurar los datos para enviarlos a VentaDAO de forma transaccional
         List<Object[]> detallesCarrito = new ArrayList<>();
+        List<Object[]> detallesTicket = new ArrayList<>(); // Para el ticket físico
         
         for (int i = 0; i < modeloTabla.getRowCount(); i++) {
             int idProd = (int) modeloTabla.getValueAt(i, 0);
+            String desc = (String) modeloTabla.getValueAt(i, 2); // Tomamos la descripción
             int cantidad = (int) modeloTabla.getValueAt(i, 3);
             double precioUnitario = (double) modeloTabla.getValueAt(i, 4);
             
+            // Llenamos datos para persistencia SQL
             // Estructura idéntica a la que espera el bucle for de tu VentaDAO: Object[] { id, cantidad, precio }
             detallesCarrito.add(new Object[]{ idProd, cantidad, precioUnitario });
+
+            // Llenamos datos con Texto para el Ticket físico: { id, descripcion, cantidad, precio }
+            detallesTicket.add(new Object[]{ idProd, desc, cantidad, precioUnitario });
         }
 
         // Llamada a la capa de persistencia transaccional
+        // Guardar en base de Datos
         boolean exito = ventaDAO.registrarVenta(totalVenta, detallesCarrito);
 
         if (exito) {
-            JOptionPane.showMessageDialog(this, "¡Venta registrada con éxito!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
+            // 2. DISPARO SILENCIOSO DE IMPRESIÓN
+            // Puedes pasarle "default" para la predeterminada, o el nombre de tu marca (ej: "POS-58", "Epson")
+            servicios.TicketPrinterService imp = new servicios.TicketPrinterService(detallesTicket, totalVenta);
+            imp.imprimirSilencioso("default"); 
+
+            JOptionPane.showMessageDialog(this, "¡Venta registrada y ticket enviado!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
             
             // TODO: Lanzar la impresión del ticket aquí en el siguiente paso.
 
