@@ -92,6 +92,33 @@ public class RegistroProductoPanel extends JPanel{
         txtStock.setFont(fontTxt);
         gbc.gridx = 1; gbc.weightx = 1.0;
         add(txtStock, gbc);
+
+        // --- BOTONES DE ACCIÓN ---
+        JPanel pnlBotones = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 0));
+        pnlBotones.setOpaque(false);
+
+        btnLimpiar = new JButton("Limpiar Campos");
+        btnLimpiar.setFont(new Font("SansSerif", Font.BOLD, 14));
+        btnLimpiar.setPreferredSize(new Dimension(150, 40));
+
+        btnGuardar = new JButton("Guardar Producto");
+        btnGuardar.setFont(new Font("SansSerif", Font.BOLD, 14));
+        btnGuardar.setBackground(new Color(40, 167, 69)); // Verde éxito
+        btnGuardar.setForeground(Color.WHITE);
+        btnGuardar.setPreferredSize(new Dimension(170, 40));
+
+        pnlBotones.add(btnLimpiar);
+        pnlBotones.add(btnGuardar);
+
+        gbc.gridx = 0; gbc.gridy = 6;
+        gbc.gridwidth = 2;
+        gbc.weightx = 1.0;
+        gbc.insets = new Insets(25, 10, 10, 10);
+        add(pnlBotones, gbc);
+
+        // --- EVENTOS ---
+        btnLimpiar.addActionListener(e -> limpiarCampos());
+        btnGuardar.addActionListener(e -> guardarProducto());
     }
     
     private void configurarValidaciones() {
