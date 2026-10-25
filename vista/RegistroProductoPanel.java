@@ -42,6 +42,56 @@ public class RegistroProductoPanel extends JPanel{
         JSeparator separador = new JSeparator();
         gbc.gridy = 1;
         add(separador, gbc);
+
+        // --- FUENTES Y ESTILOS COMUNES ---
+        Font fontLabel = new Font("SansSerif", Font.BOLD, 14);
+        Font fontTxt = new Font("SansSerif", Font.PLAIN, 14);
+        gbc.gridwidth = 1;
+        gbc.weightx = 0.0;
+
+        // 1. Código de Barras
+        JLabel lblCodigo = new JLabel("Código de Barras:");
+        lblCodigo.setFont(fontLabel);
+        gbc.gridx = 0; gbc.gridy = 2;
+        add(lblCodigo, gbc);
+
+        txtCodigo = new JTextField(20);
+        txtCodigo.setFont(fontTxt);
+        gbc.gridx = 1; gbc.weightx = 1.0;
+        add(txtCodigo, gbc);
+
+        // 2. Descripción / Nombre
+        JLabel lblNombre = new JLabel("Descripción / Nombre:");
+        lblNombre.setFont(fontLabel);
+        gbc.gridx = 0; gbc.gridy = 3; gbc.weightx = 0.0;
+        add(lblNombre, gbc);
+
+        txtNombre = new JTextField(20);
+        txtNombre.setFont(fontTxt);
+        gbc.gridx = 1; gbc.weightx = 1.0;
+        add(txtNombre, gbc);
+
+        // 3. Precio de Venta
+        JLabel lblPrecio = new JLabel("Precio de Venta ($):");
+        lblPrecio.setFont(fontLabel);
+        gbc.gridx = 0; gbc.gridy = 4; gbc.weightx = 0.0;
+        add(lblPrecio, gbc);
+
+        txtPrecio = new JTextField(20);
+        txtPrecio.setFont(fontTxt);
+        gbc.gridx = 1; gbc.weightx = 1.0;
+        add(txtPrecio, gbc);
+
+        // 4. Inventario Inicial (Stock)
+        JLabel lblStock = new JLabel("Stock Inicial:");
+        lblStock.setFont(fontLabel);
+        gbc.gridx = 0; gbc.gridy = 5; gbc.weightx = 0.0;
+        add(lblStock, gbc);
+
+        txtStock = new JTextField(20);
+        txtStock.setFont(fontTxt);
+        gbc.gridx = 1; gbc.weightx = 1.0;
+        add(txtStock, gbc);
     }
     
     private void configurarValidaciones() {
