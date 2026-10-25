@@ -14,6 +14,22 @@ public class RegistroProductoPanel extends JPanel{
     private JButton btnGuardar, btnLimpiar;
     private ProductoDAO productoDAO;
     
+    public RegistroProductoPanel() {
+        productoDAO = new ProductoDAO();
+        configurarValidaciones();
+    }
+
+    private void initComponents() {
+        setLayout(new GridBagLayout());
+        setBackground(new Color(245, 247, 250));
+        setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        
+    }
     
     private void configurarValidaciones() {
         // Validación en tiempo de escritura para que Precio admita solo números y un punto decimal
