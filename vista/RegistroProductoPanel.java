@@ -28,7 +28,20 @@ public class RegistroProductoPanel extends JPanel{
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        
+        // --- TÍTULO DEL MÓDULO ---
+        JLabel lblTitulo = new JLabel("REGISTRO DE NUEVOS PRODUCTOS", SwingConstants.CENTER);
+        lblTitulo.setFont(new Font("SansSerif", Font.BOLD, 22));
+        lblTitulo.setForeground(new Color(52, 58, 64));
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.weightx = 1.0;
+        add(lblTitulo, gbc);
+
+        // Separador visual
+        JSeparator separador = new JSeparator();
+        gbc.gridy = 1;
+        add(separador, gbc);
     }
     
     private void configurarValidaciones() {
