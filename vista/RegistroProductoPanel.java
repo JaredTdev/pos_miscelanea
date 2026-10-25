@@ -14,6 +14,112 @@ public class RegistroProductoPanel extends JPanel{
     private JButton btnGuardar, btnLimpiar;
     private ProductoDAO productoDAO;
     
+    public RegistroProductoPanel() {
+        productoDAO = new ProductoDAO();
+        configurarValidaciones();
+    }
+
+    private void initComponents() {
+        setLayout(new GridBagLayout());
+        setBackground(new Color(245, 247, 250));
+        setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        // --- TÍTULO DEL MÓDULO ---
+        JLabel lblTitulo = new JLabel("REGISTRO DE NUEVOS PRODUCTOS", SwingConstants.CENTER);
+        lblTitulo.setFont(new Font("SansSerif", Font.BOLD, 22));
+        lblTitulo.setForeground(new Color(52, 58, 64));
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.weightx = 1.0;
+        add(lblTitulo, gbc);
+
+        // Separador visual
+        JSeparator separador = new JSeparator();
+        gbc.gridy = 1;
+        add(separador, gbc);
+
+        // --- FUENTES Y ESTILOS COMUNES ---
+        Font fontLabel = new Font("SansSerif", Font.BOLD, 14);
+        Font fontTxt = new Font("SansSerif", Font.PLAIN, 14);
+        gbc.gridwidth = 1;
+        gbc.weightx = 0.0;
+
+        // 1. Código de Barras
+        JLabel lblCodigo = new JLabel("Código de Barras:");
+        lblCodigo.setFont(fontLabel);
+        gbc.gridx = 0; gbc.gridy = 2;
+        add(lblCodigo, gbc);
+
+        txtCodigo = new JTextField(20);
+        txtCodigo.setFont(fontTxt);
+        gbc.gridx = 1; gbc.weightx = 1.0;
+        add(txtCodigo, gbc);
+
+        // 2. Descripción / Nombre
+        JLabel lblNombre = new JLabel("Descripción / Nombre:");
+        lblNombre.setFont(fontLabel);
+        gbc.gridx = 0; gbc.gridy = 3; gbc.weightx = 0.0;
+        add(lblNombre, gbc);
+
+        txtNombre = new JTextField(20);
+        txtNombre.setFont(fontTxt);
+        gbc.gridx = 1; gbc.weightx = 1.0;
+        add(txtNombre, gbc);
+
+        // 3. Precio de Venta
+        JLabel lblPrecio = new JLabel("Precio de Venta ($):");
+        lblPrecio.setFont(fontLabel);
+        gbc.gridx = 0; gbc.gridy = 4; gbc.weightx = 0.0;
+        add(lblPrecio, gbc);
+
+        txtPrecio = new JTextField(20);
+        txtPrecio.setFont(fontTxt);
+        gbc.gridx = 1; gbc.weightx = 1.0;
+        add(txtPrecio, gbc);
+
+        // 4. Inventario Inicial (Stock)
+        JLabel lblStock = new JLabel("Stock Inicial:");
+        lblStock.setFont(fontLabel);
+        gbc.gridx = 0; gbc.gridy = 5; gbc.weightx = 0.0;
+        add(lblStock, gbc);
+
+        txtStock = new JTextField(20);
+        txtStock.setFont(fontTxt);
+        gbc.gridx = 1; gbc.weightx = 1.0;
+        add(txtStock, gbc);
+
+        // --- BOTONES DE ACCIÓN ---
+        JPanel pnlBotones = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 0));
+        pnlBotones.setOpaque(false);
+
+        btnLimpiar = new JButton("Limpiar Campos");
+        btnLimpiar.setFont(new Font("SansSerif", Font.BOLD, 14));
+        btnLimpiar.setPreferredSize(new Dimension(150, 40));
+
+        btnGuardar = new JButton("Guardar Producto");
+        btnGuardar.setFont(new Font("SansSerif", Font.BOLD, 14));
+        btnGuardar.setBackground(new Color(40, 167, 69)); // Verde éxito
+        btnGuardar.setForeground(Color.WHITE);
+        btnGuardar.setPreferredSize(new Dimension(170, 40));
+
+        pnlBotones.add(btnLimpiar);
+        pnlBotones.add(btnGuardar);
+
+        gbc.gridx = 0; gbc.gridy = 6;
+        gbc.gridwidth = 2;
+        gbc.weightx = 1.0;
+        gbc.insets = new Insets(25, 10, 10, 10);
+        add(pnlBotones, gbc);
+
+        // --- EVENTOS ---
+        btnLimpiar.addActionListener(e -> limpiarCampos());
+        btnGuardar.addActionListener(e -> guardarProducto());
+    }
     
     private void configurarValidaciones() {
         // Validación en tiempo de escritura para que Precio admita solo números y un punto decimal
