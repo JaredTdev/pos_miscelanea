@@ -13,6 +13,17 @@ public class MenuPrincipal extends JFrame{
     private PriceCheckerPanel moduloPriceChecker;
     private RegistroProductoPanel moduloRegistro;
 
+    public MenuPrincipal() {
+        setTitle("SISTEMA PUNTO DE VENTA (POS) - ESCRITORIO");
+        setSize(1024, 700); // Resolución inicial ideal para pantallas estándar
+        setMinimumSize(new Dimension(800, 600));
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null); // Centra la aplicación al arrancar
+
+        initComponents();
+        configurarLógicaFoco();
+    }
+
     private void initComponents() {
         // Inicializamos las pantallas individuales que creamos antes
         moduloVentas = new VentasPanel();
