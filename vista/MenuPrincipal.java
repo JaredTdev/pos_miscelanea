@@ -56,4 +56,21 @@ public class MenuPrincipal extends JFrame{
         // Forzar el foco inicial en la pantalla de ventas al abrir el programa
         SwingUtilities.invokeLater(() -> moduloVentas.solicitarFocoEscaner());
     }
+
+    /**
+     * MÉTODO DE ARRANQUE PRINCIPAL (MAIN)
+     */
+    public static void main(String[] args) {
+        // Aplicar el estilo visual nativo del sistema operativo (Look and Feel)
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            System.out.println("No se pudo establecer el Look and Feel nativo: " + e.getMessage());
+        }
+
+        // Lanzar la aplicación en el hilo de eventos de Swing de forma segura
+        EventQueue.invokeLater(() -> {
+            new MenuPrincipal().setVisible(true);
+        });
+    }
 }
