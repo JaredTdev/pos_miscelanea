@@ -16,6 +16,7 @@ public class RegistroProductoPanel extends JPanel{
     
     public RegistroProductoPanel() {
         productoDAO = new ProductoDAO();
+        initComponents();
         configurarValidaciones();
     }
 
