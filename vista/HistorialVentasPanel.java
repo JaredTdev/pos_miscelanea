@@ -35,6 +35,14 @@ public class HistorialVentasPanel extends JPanel{
         lblTitulo.setForeground(new Color(52, 58, 64));
         pnlNorte.add(lblTitulo, BorderLayout.WEST);
 
+        // Botón para actualizar el reporte manualmente
+        JButton btnActualizar = new JButton("🔄 Actualizar Historial");
+        btnActualizar.setFont(new Font("SansSerif", Font.BOLD, 13));
+        btnActualizar.addActionListener(e -> cargarHistorial());
+        pnlNorte.add(btnActualizar, BorderLayout.EAST);
+
+        add(pnlNorte, BorderLayout.NORTH);
+
     }
 
     /**
