@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,12 @@ public class HistorialVentasPanel extends JPanel{
     private SimpleDateFormat formateadorFecha;
 
 
+    private void initComponents() {
+        setLayout(new BorderLayout(15, 15));
+        setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        setBackground(new Color(245, 247, 250));
+
+    }
 
     /**
      * Consulta la Base de Datos mediante el VentaDAO y refresca las filas de la tabla.
