@@ -119,14 +119,35 @@ public class VentasPanel extends JPanel {
     }
 
     private void configurarEscaner() {
-        // Al dar "Enter" con el escáner se procesa el artículo
+    // ACCIÓN 1: Captura cuando presionas "Enter" (Mecanismo estándar de JTextField)
         txtEscaner.addActionListener(e -> {
-            String codigo = txtEscaner.getText().trim();
-            if (!codigo.isEmpty()) {
-                agregarProductoAlCarrito(codigo);
-            }
-            txtEscaner.setText("");
+            procesarEntradaEscaner();
         });
+
+        // ACCIÓN 2: Mecanismo de seguridad por si el lector emite el evento de tecla de forma nativa
+        txtEscaner.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override
+            public void keyPressed(java.awt.event.KeyEvent e) {
+                if (e.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+                    procesarEntradaEscaner();
+                }
+            }
+        });
+
+    }
+
+    // Método auxiliar para limpiar y procesar la entrada de texto
+    private void procesarEntradaEscaner() {
+        String codigo = txtEscaner.getText().trim();
+        
+        // Algunos lectores envían caracteres de control ocultos. Esto los limpia:
+        codigo = codigo.replaceAll("[\\r\\n]", ""); 
+
+        if (!codigo.isEmpty()) {
+            agregarProductoAlCarrito(codigo);
+        }
+        txtEscaner.setText(""); // Limpia el campo de inmediato para el siguiente producto
+        txtEscaner.requestFocusInWindow(); // Devuelve el foco automáticamente
     }
 
     private void agregarProductoAlCarrito(String codigo) {
