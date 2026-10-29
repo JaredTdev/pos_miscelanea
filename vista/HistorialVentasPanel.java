@@ -43,6 +43,23 @@ public class HistorialVentasPanel extends JPanel{
 
         add(pnlNorte, BorderLayout.NORTH);
 
+        // --- TABLA DE REGISTROS (CENTRO) ---
+        String[] columnas = {"ID de Venta", "Fecha y Hora", "Total Recaudado"};
+        modeloTabla = new DefaultTableModel(columnas, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Bloquear edición de celdas
+            }
+        };
+
+        tblHistorial = new JTable(modeloTabla);
+        tblHistorial.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        tblHistorial.setRowHeight(26);
+        tblHistorial.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 14));
+
+        JScrollPane scrollTabla = new JScrollPane(tblHistorial);
+        add(scrollTabla, BorderLayout.CENTER);
+
     }
 
     /**
