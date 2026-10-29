@@ -205,18 +205,19 @@ public class VentasPanel extends JPanel {
         }
 
         // Estructurar los datos para enviarlos a VentaDAO de forma transaccional
-        List<Object[]> detallesCarrito = new ArrayList<>();
+        List<Object[]> detallesDAO = new ArrayList<>();
         List<Object[]> detallesTicket = new ArrayList<>(); // Para el ticket físico
         
         for (int i = 0; i < modeloTabla.getRowCount(); i++) {
+            // Nota el [i] agregado en cada fila para leer correctamente el JTable
             int idProd = (int) modeloTabla.getValueAt(i, 0);
-            String desc = (String) modeloTabla.getValueAt(i, 2); // Tomamos la descripción
+            String desc = (String) modeloTabla.getValueAt(i, 2); 
             int cantidad = (int) modeloTabla.getValueAt(i, 3);
             double precioUnitario = (double) modeloTabla.getValueAt(i, 4);
             
             // Llenamos datos para persistencia SQL
             // Estructura idéntica a la que espera el bucle for de tu VentaDAO: Object[] { id, cantidad, precio }
-            detallesCarrito.add(new Object[]{ idProd, cantidad, precioUnitario });
+            detallesDAO.add(new Object[]{ idProd, cantidad, precioUnitario });
 
             // Llenamos datos con Texto para el Ticket físico: { id, descripcion, cantidad, precio }
             detallesTicket.add(new Object[]{ idProd, desc, cantidad, precioUnitario });
@@ -224,7 +225,7 @@ public class VentasPanel extends JPanel {
 
         // Llamada a la capa de persistencia transaccional
         // Guardar en base de Datos
-        boolean exito = ventaDAO.registrarVenta(totalVenta, detallesCarrito);
+        boolean exito = ventaDAO.registrarVenta(totalVenta, detallesDAO);
 
         if (exito) {
 
