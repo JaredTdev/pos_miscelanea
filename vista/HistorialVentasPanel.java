@@ -26,6 +26,15 @@ public class HistorialVentasPanel extends JPanel{
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         setBackground(new Color(245, 247, 250));
 
+        // --- ENCABEZADO ---
+        JPanel pnlNorte = new JPanel(new BorderLayout());
+        pnlNorte.setOpaque(false);
+
+        JLabel lblTitulo = new JLabel("HISTORIAL Y REPORTE DE VENTAS");
+        lblTitulo.setFont(new Font("SansSerif", Font.BOLD, 20));
+        lblTitulo.setForeground(new Color(52, 58, 64));
+        pnlNorte.add(lblTitulo, BorderLayout.WEST);
+
     }
 
     /**
