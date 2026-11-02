@@ -60,6 +60,27 @@ public class HistorialVentasPanel extends JPanel{
         JScrollPane scrollTabla = new JScrollPane(tblHistorial);
         add(scrollTabla, BorderLayout.CENTER);
 
+        //CONTROLES Y TOTALES (SUR)
+        JPanel pnlSur = new JPanel(new BorderLayout(20, 10));
+        pnlSur.setOpaque(false);
+
+        // Etiqueta de sumatoria total del día/historial
+        lblTotalAcumulado = new JLabel("Total Histórico: $0.00");
+        lblTotalAcumulado.setFont(new Font("SansSerif", Font.BOLD, 20));
+        lblTotalAcumulado.setForeground(new Color(0, 123, 255));
+        pnlSur.add(lblTotalAcumulado, BorderLayout.WEST);
+
+        // Botón de reimpresión de tickets
+        JButton btnReimprimir = new JButton("🖨️ Reimprimir Ticket Seleccionado");
+        btnReimprimir.setFont(new Font("SansSerif", Font.BOLD, 14));
+        btnReimprimir.setBackground(new Color(108, 117, 125)); // Gris oscuro moderno
+        btnReimprimir.setForeground(Color.WHITE);
+        btnReimprimir.setPreferredSize(new Dimension(280, 45));
+        btnReimprimir.addActionListener(e -> accionarReimpresion());
+        pnlSur.add(btnReimprimir, BorderLayout.EAST);
+
+        add(pnlSur, BorderLayout.SOUTH);
+
     }
 
     /**
