@@ -12,6 +12,7 @@ public class MenuPrincipal extends JFrame{
     private VentasPanel moduloVentas;
     private PriceCheckerPanel moduloPriceChecker;
     private RegistroProductoPanel moduloRegistro;
+    private HistorialVentasPanel moduloHistorial;
 
     public MenuPrincipal() {
         setTitle("SISTEMA PUNTO DE VENTA (POS) - ESCRITORIO");
@@ -29,6 +30,7 @@ public class MenuPrincipal extends JFrame{
         moduloVentas = new VentasPanel();
         moduloPriceChecker = new PriceCheckerPanel();
         moduloRegistro = new RegistroProductoPanel();
+        moduloHistorial = new HistorialVentasPanel();
 
         // Creamos el contenedor de pestañas
         panelPestañas = new JTabbedPane();
@@ -38,6 +40,7 @@ public class MenuPrincipal extends JFrame{
         panelPestañas.addTab("Módulo de Ventas  ", moduloVentas);
         panelPestañas.addTab("Verificador de Precios  ", moduloPriceChecker);
         panelPestañas.addTab("Registrar Productos  ", moduloRegistro);
+        panelPestañas.addTab("Historial de Ventas  ", moduloHistorial);
 
         // Añadir el contenedor a la ventana principal
         add(panelPestañas, BorderLayout.CENTER);
@@ -59,6 +62,9 @@ public class MenuPrincipal extends JFrame{
                         break;
                     case 2:
                         moduloRegistro.solicitarFocoInicial();
+                        break;
+                    case 3:
+                        moduloHistorial.cargarHistorial(); // Recarga las ventas actualizadas de la BD automáticamente
                         break;
                 }
             }
