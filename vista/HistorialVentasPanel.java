@@ -20,6 +20,12 @@ public class HistorialVentasPanel extends JPanel{
     private VentaDAO ventaDAO;
     private SimpleDateFormat formateadorFecha;
 
+    public HistorialVentasPanel() {
+        ventaDAO = new VentaDAO();
+        formateadorFecha = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        initComponents();
+        cargarHistorial();
+    }
 
     private void initComponents() {
         setLayout(new BorderLayout(15, 15));
