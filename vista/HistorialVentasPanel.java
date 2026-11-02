@@ -4,10 +4,13 @@ import java.text.SimpleDateFormat;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 import dao.VentaDAO;
+import servicios.TicketPrinterService;
 
 public class HistorialVentasPanel extends JPanel{
 
@@ -17,7 +20,74 @@ public class HistorialVentasPanel extends JPanel{
     private VentaDAO ventaDAO;
     private SimpleDateFormat formateadorFecha;
 
+    public HistorialVentasPanel() {
+        ventaDAO = new VentaDAO();
+        formateadorFecha = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        initComponents();
+        cargarHistorial();
+    }
 
+    private void initComponents() {
+        setLayout(new BorderLayout(15, 15));
+        setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        setBackground(new Color(245, 247, 250));
+
+        // --- ENCABEZADO ---
+        JPanel pnlNorte = new JPanel(new BorderLayout());
+        pnlNorte.setOpaque(false);
+
+        JLabel lblTitulo = new JLabel("HISTORIAL Y REPORTE DE VENTAS");
+        lblTitulo.setFont(new Font("SansSerif", Font.BOLD, 20));
+        lblTitulo.setForeground(new Color(52, 58, 64));
+        pnlNorte.add(lblTitulo, BorderLayout.WEST);
+
+        // Botón para actualizar el reporte manualmente
+        JButton btnActualizar = new JButton("🔄 Actualizar Historial");
+        btnActualizar.setFont(new Font("SansSerif", Font.BOLD, 13));
+        btnActualizar.addActionListener(e -> cargarHistorial());
+        pnlNorte.add(btnActualizar, BorderLayout.EAST);
+
+        add(pnlNorte, BorderLayout.NORTH);
+
+        // --- TABLA DE REGISTROS (CENTRO) ---
+        String[] columnas = {"ID de Venta", "Fecha y Hora", "Total Recaudado"};
+        modeloTabla = new DefaultTableModel(columnas, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Bloquear edición de celdas
+            }
+        };
+
+        tblHistorial = new JTable(modeloTabla);
+        tblHistorial.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        tblHistorial.setRowHeight(26);
+        tblHistorial.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 14));
+
+        JScrollPane scrollTabla = new JScrollPane(tblHistorial);
+        add(scrollTabla, BorderLayout.CENTER);
+
+        //CONTROLES Y TOTALES (SUR)
+        JPanel pnlSur = new JPanel(new BorderLayout(20, 10));
+        pnlSur.setOpaque(false);
+
+        // Etiqueta de sumatoria total del día/historial
+        lblTotalAcumulado = new JLabel("Total Histórico: $0.00");
+        lblTotalAcumulado.setFont(new Font("SansSerif", Font.BOLD, 20));
+        lblTotalAcumulado.setForeground(new Color(0, 123, 255));
+        pnlSur.add(lblTotalAcumulado, BorderLayout.WEST);
+
+        // Botón de reimpresión de tickets
+        JButton btnReimprimir = new JButton("🖨️ Reimprimir Ticket Seleccionado");
+        btnReimprimir.setFont(new Font("SansSerif", Font.BOLD, 14));
+        btnReimprimir.setBackground(new Color(108, 117, 125)); // Gris oscuro moderno
+        btnReimprimir.setForeground(Color.WHITE);
+        btnReimprimir.setPreferredSize(new Dimension(280, 45));
+        btnReimprimir.addActionListener(e -> accionarReimpresion());
+        pnlSur.add(btnReimprimir, BorderLayout.EAST);
+
+        add(pnlSur, BorderLayout.SOUTH);
+
+    }
 
     /**
      * Consulta la Base de Datos mediante el VentaDAO y refresca las filas de la tabla.
@@ -41,5 +111,31 @@ public class HistorialVentasPanel extends JPanel{
         }
 
         lblTotalAcumulado.setText(String.format("Total Histórico: $%.2f", sumatoriaTotal));
+    }
+
+    /**
+     * Recupera la venta seleccionada y simula una reimpresión utilizando el servicio físico.
+     */
+    private void accionarReimpresion() {
+        int filaSeleccionada = tblHistorial.getSelectedRow();
+        if (filaSeleccionada < 0) {
+            JOptionPane.showMessageDialog(this, "Por favor, seleccione una venta de la lista para reimprimir.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Obtener datos básicos de la fila seleccionada
+        String idVentaStr = modeloTabla.getValueAt(filaSeleccionada, 0).toString();
+        String totalStr = modeloTabla.getValueAt(filaSeleccionada, 2).toString().replace("$", "");
+        double total = Double.parseDouble(totalStr);
+
+        // Crear una lista ficticia con formato de ticket para la reimpresión rápida de la cabecera
+        List<Object[]> detallesReimpresion = new ArrayList<>();
+        detallesReimpresion.add(new Object[]{"REIMPRESIÓN TICKET #" + idVentaStr, 1, total});
+
+        // Despachar a la ticketera de forma silenciosa
+        TicketPrinterService imp = new TicketPrinterService(detallesReimpresion, total);
+        imp.imprimirSilencioso("default");
+
+        JOptionPane.showMessageDialog(this, "Orden de reimpresión enviada para la venta #" + idVentaStr, "Éxito", JOptionPane.INFORMATION_MESSAGE);
     }
 }
